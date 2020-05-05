@@ -15,6 +15,22 @@ const scoreContainer = document.querySelector('.score');
 const scoreBoard = document.querySelector('.score span');
 const startButton = document.querySelector('button');
 
+const startSound = new Audio();
+const leftSound = new Audio();
+const rightSound = new Audio();
+const upSound = new Audio();
+const downSound = new Audio();
+const overSound = new Audio();
+const eatSound = new Audio();
+
+startSound.src = './audio/start.ogg';
+leftSound.src = './audio/left.mp3';
+rightSound.src = './audio/right.mp3';
+upSound.src = './audio/up.mp3';
+downSound.src = './audio/down.mp3';
+overSound.src = './audio/over.mp3';
+eatSound.src = './audio/eat.mp3';
+
 let score = 0;
 let gameInterval;
 let snake;
@@ -43,12 +59,16 @@ function changeSnakeDirection(event) {
   let keyCode = event.keyCode;
   if (keyCode == 37 && currentDirection != "RIGHT") {
     currentDirection = "LEFT";
+    leftSound.play();
   } else if (keyCode == 38 && currentDirection != "DOWN") {
     currentDirection = "UP";
+    downSound.play();
   } else if (keyCode == 39 && currentDirection != "LEFT") {
     currentDirection = "RIGHT";
+    rightSound.play();
   } else if (keyCode == 40 && currentDirection != "UP") {
     currentDirection = "DOWN";
+    downSound.play();
   }
 }
 
@@ -95,6 +115,7 @@ const drawImage = () => {
 
   if (snakeX === apple.x && snakeY === apple.y) {
     score++;
+    eatSound.play();
     apple = {
       x: Math.floor(Math.random() * 17 + 1) * boxUnit,
       y: Math.floor(Math.random() * 15 + 3) * boxUnit
@@ -110,6 +131,7 @@ const drawImage = () => {
 
   if (snakeX < boxUnit || snakeX > 17 * boxUnit ||
     snakeY < 3 * boxUnit || snakeY > 17 * boxUnit || snakeCollision(newHead, snake)) {
+    overSound.play();
     showGameOverScreen();
   }
 
@@ -119,6 +141,7 @@ const drawImage = () => {
 
 const startGame = () => {
   reset();
+  startSound.play();
   startButton.classList.add('btn-hide');
   gameInterval = setInterval(drawImage, 100);
 }
